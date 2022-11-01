@@ -1,25 +1,36 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Container } from "react-bootstrap";
 
-function App() {
+import { Title } from "./component/title/Title.component";
+import { MovieList } from "./component/movie-list/MovieList.component";
+import { SearchForm } from "./component/search-form/SearchForm.component";
+import { useState } from "react";
+
+const App = () => {
+  const [movieList, setMovieList] = useState([]);
+
+  const addMovie = (movie) => {
+    const filteredMovies = movieList.filter(
+      (item) => item.imdbID !== movie.imdbID
+    );
+    console.log(filteredMovies);
+    setMovieList([...filteredMovies, movie]);
+  };
+  const deleteMovie = (id) => {
+    if (!window.confirm("Are your sure?")) {
+      return;
+    }
+    setMovieList(movieList.filter((item) => item.imdbID !== id));
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="wrapper">
+      <Container>
+        <Title />
+        <SearchForm addMovie={addMovie} />
+        <MovieList movieList={movieList} deleteMovie={deleteMovie} />
+      </Container>
     </div>
   );
-}
+};
 
 export default App;
